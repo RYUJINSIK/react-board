@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  justify-content: space-between; /* 좌우 정렬을 위해 각 요소 사이에 공간 배분 */
+  align-items: center; /* 세로 가운데 정렬 */
+  padding: 5px 20px; /* 위아래로 10px, 좌우로 20px의 여백 설정 */
+}
+
+.left-content {
+  flex: 1;
+}
+
+.right-content {
+  margin-left: 10px;
+}
+
+#writeButton {
+  height: 50px;
+  width: 150px;
+  background-color: #6cb8fb;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#writeButton:hover {
+  background-color: lightcyan; /* 마우스 호버 시 배경색 변경 */
+}

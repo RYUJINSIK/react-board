@@ -1,0 +1,20 @@
+/* MainScreen.css */
+.post-container {
+  width: 95%; /* 필요에 따라 너비 조정 */
+  margin: 0 auto; /* 중앙 정렬을 위한 왼쪽, 오른쪽 여백 자동 설정 */
+}
+
+.post-list {
+  display: flex;
+  flex-wrap: wrap; /* 요소들을 여러 줄로 묶음 */
+  gap: 20px; /* 요소들 사이의 간격 설정 */
+}
+
+.post-item {
+  width: calc(33.333% - 20px); /* 3개씩 나열하고 간격은 20px로 설정 */
+  background-color: rgb(240, 248, 251); /* 배경색 설정 */
+  padding: 10px; /* 내부 여백 설정 */
+  border-radius: 5px; /* 모서리를 둥글게 설정 */
+  border: rgb(221, 221, 221) solid 1px;
+  box-sizing: border-box; /* 패딩과 테두리를 포함하여 요소의 전체 크기 계산 */
+}
