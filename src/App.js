@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Form from "./components/Form/Form";
 import MainScreen from "./components/MainScreen/MainScreen";
+import PostDetail from "./components/PostDetail/PostDetail";
 
 function App() {
   const [showForm, setShowForm] = useState(false);
@@ -26,7 +27,14 @@ function App() {
         </div>
       </div>
 
-      {showForm ? <Form /> : <MainScreen />}
+      {showForm ? (
+        <Form />
+      ) : (
+        <Routes>
+          <Route path="/" element={<MainScreen />}></Route>
+          <Route path="/post/1" element={<PostDetail postId="1" />}></Route>
+        </Routes>
+      )}
     </Router>
   );
 }
