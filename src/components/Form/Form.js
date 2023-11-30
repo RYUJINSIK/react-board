@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Form.css";
+import axios from "axios";
 
 const Form = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,23 @@ const Form = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    axios
+      .post("/write", null, {
+        params: {
+          username: username,
+          title: title,
+          content: content,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        alert("글 작성이 완료되었습니다.");
+        document.location.href = "/";
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     setFormData({
       username: "",
@@ -56,6 +74,15 @@ const Form = () => {
             onChange={handleInputChange}
             required
           ></textarea>
+        </div>
+        <div className="form-group">
+          <label>첨부파일:</label>
+          <input
+            type="file"
+            name="filename"
+            onChange={handleInputChange}
+            required
+          ></input>
         </div>
         <div className="button-container">
           <button type="submit" className="submit-button">

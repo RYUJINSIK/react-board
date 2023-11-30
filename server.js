@@ -2,10 +2,6 @@ const express = require("express");
 const app = express();
 const port = 3001;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
@@ -26,10 +22,38 @@ db.connect(function (err) {
   console.log("DB is Connected!");
 });
 
-// API Server
-app.get("/user", (req, res) => {
-  var sql = "SELECT * FROM board;";
+// 글 목록
+app.get("/select", (req, res) => {
+  const sql = "SELECT * FROM board;";
   db.query(sql, (err, result) => {
+    if (err) console.log(err);
+    else res.send(result);
+  });
+});
+
+// 글 조회
+app.get("/read", (req, res) => {
+  const postId = req.query.postId;
+
+  const sql = "SELECT * FROM board WHERE id = ? ;";
+  db.query(sql, postId, (err, result) => {
+    if (err) console.log(err);
+    else res.send(result);
+  });
+});
+
+//글 작성
+app.post("/write", (req, res) => {
+  const title = req.query.title;
+  const content = req.query.content;
+  const username = req.query.username;
+  const values = [title, content, username];
+
+  //SQL 코드
+  const sql =
+    "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1)";
+
+  db.query(sql, values, (err, result) => {
     if (err) console.log(err);
     else res.send(result);
   });

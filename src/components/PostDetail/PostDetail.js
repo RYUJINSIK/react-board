@@ -1,16 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
-const PostDetail = (props) => {
-  const postId = props.postId;
-  console.log("postId : " + postId);
+const PostDetail = () => {
+  const { postId } = useParams();
+  const [post, setPost] = useState([]);
 
-  // postId를 이용하여 해당 게시글 정보를 가져오는 로직이 있어야 합니다.
-  // 아래는 예시로 간단히 postId를 출력하는 코드입니다.
+  useEffect(() => {
+    axios
+      .get("/read", {
+        params: {
+          postId: parseInt(postId),
+        },
+      })
+      .then((res) => {
+        console.log("?", res.data);
+        setPost(res.data);
+      })
+      .catch((error) => {
+        console.log("!", error);
+      });
 
-  return (
+    // axios(
+    //   {
+    //     method: "get",
+    //     url: "/read",
+    //     params: {
+    //       postId: parseInt(postId),
+    //     },
+    //   },
+    //   { withCredentials: true }
+    // )
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  }, []);
+
+  return post.length === 0 ? null : (
     <div>
-      <h2>게시글 상세 페이지 - {postId}</h2>
-      {/* 상세 정보 표시 */}
+      <h1>{post[0].title}</h1>
+      <h3>{post[0].content}</h3>
     </div>
   );
 };

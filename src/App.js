@@ -32,7 +32,7 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<MainScreen />}></Route>
-          <Route path="/post/1" element={<PostDetail postId="1" />}></Route>
+          <Route path="/post/:postId" element={<PostDetail />}></Route>
         </Routes>
       )}
     </Router>
