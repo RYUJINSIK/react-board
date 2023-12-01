@@ -20,30 +20,15 @@ const PostDetail = () => {
       .catch((error) => {
         console.log("!", error);
       });
-
-    // axios(
-    //   {
-    //     method: "get",
-    //     url: "/read",
-    //     params: {
-    //       postId: parseInt(postId),
-    //     },
-    //   },
-    //   { withCredentials: true }
-    // )
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }, []);
 
-  return post.length === 0 ? null : (
-    <div>
-      <h1>{post[0].title}</h1>
-      <h3>{post[0].content}</h3>
-    </div>
+  return (
+    post.length === 0 && (
+      <div>
+        <h1>{post[0].title}</h1>
+        <h3>{post[0].content}</h3>
+      </div>
+    )
   );
 };
 

@@ -7,39 +7,48 @@ const Form = () => {
     username: "",
     title: "",
     content: "",
+    file: null, // 추가: 파일 상태 추가
   });
 
-  const { username, title, content } = formData;
+  const { username, title, content, file } = formData;
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    if (event.target.name === "filename") {
+      setFormData({ ...formData, file: event.target.files[0] });
+    } else {
+      const { name, value } = event.target;
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    axios
-      .post("/write", null, {
-        params: {
-          username: username,
-          title: title,
-          content: content,
+    const postData = new FormData();
+    postData.append("username", username);
+    postData.append("title", title);
+    postData.append("content", content);
+    postData.append("file", file); // 파일 추가
+
+    try {
+      const response = await axios.post("/write", postData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      })
-      .then((res) => {
-        console.log(res.data);
-        alert("글 작성이 완료되었습니다.");
-        document.location.href = "/";
-      })
-      .catch(function (error) {
-        console.log(error);
       });
+
+      console.log(response.data);
+      alert("글 작성이 완료되었습니다.");
+      document.location.href = "/";
+    } catch (error) {
+      console.error(error);
+    }
 
     setFormData({
       username: "",
       title: "",
       content: "",
+      file: null,
     });
   };
 
