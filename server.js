@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const port = 3001;
 
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
@@ -42,18 +45,34 @@ app.get("/read", (req, res) => {
   });
 });
 
-//글 작성
-app.post("/write", (req, res) => {
-  const title = req.query.title;
-  const content = req.query.content;
-  const username = req.query.username;
-  const values = [title, content, username];
+// //글 작성
+// app.post("/write", (req, res) => {
+//   const title = req.query.title;
+//   const content = req.query.content;
+//   const username = req.query.username;
+//   const values = [title, content, username];
 
-  //SQL 코드
+//   //SQL 코드
+//   const sql =
+//     "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1)";
+
+//   db.query(sql, values, (err, result) => {
+//     if (err) console.log(err);
+//     else res.send(result);
+//   });
+// });
+
+app.post("/write", upload.single("file"), (req, res) => {
+  const title = req.body.title;
+  const content = req.body.content;
+  const username = req.body.username;
+  const file = req.file;
+
+  // SQL 코드
   const sql =
     "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1)";
 
-  db.query(sql, values, (err, result) => {
+  db.query(sql, [title, content, username], (err, result) => {
     if (err) console.log(err);
     else res.send(result);
   });
