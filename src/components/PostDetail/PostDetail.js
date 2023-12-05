@@ -14,7 +14,7 @@ const PostDetail = () => {
         },
       })
       .then((res) => {
-        console.log("?", res.data);
+        console.log("??", res);
         setPost(res.data);
       })
       .catch((error) => {
@@ -23,7 +23,7 @@ const PostDetail = () => {
   }, []);
 
   return (
-    post.length === 0 && (
+    post.length !== 0 && (
       <div>
         <h1>{post[0].title}</h1>
         <h3>{post[0].content}</h3>

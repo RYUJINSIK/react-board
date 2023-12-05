@@ -66,14 +66,15 @@ app.post("/write", upload.single("file"), (req, res) => {
   const title = req.body.title;
   const content = req.body.content;
   const username = req.body.username;
-  const file = req.file;
+  const file = req.file.path;
+  const values = [title, content, username, file];
 
   // SQL 코드
   const sql =
-    "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1)";
+    "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1, ?)";
 
-  db.query(sql, [title, content, username], (err, result) => {
-    if (err) console.log(err);
+  db.query(sql, values, (err, result) => {
+    if (err) console.log(err, sql);
     else res.send(result);
   });
 });
