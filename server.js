@@ -1,21 +1,35 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = 3001;
-
+const port = process.env.REACT_APP_PORT;
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const path = require("path");
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+app.use(express.static(path.join(__dirname, "uploads")));
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // 업로드된 파일 저장 경로
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname); // 확장자
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9); // 고유한 값 생성
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext); // 파일명 설정 (원본 파일명 + 고유한 값 + 확장자)
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const mysql = require("mysql");
 
 // sql 연동
 const db = mysql.createConnection({
-  user: "root",
+  user: process.env.REACT_APP_DBUSER,
   host: "localhost",
-  password: "12345678",
+  password: process.env.REACT_APP_DBPASSWORD,
   database: "board",
 });
 
@@ -45,31 +59,14 @@ app.get("/read", (req, res) => {
   });
 });
 
-// //글 작성
-// app.post("/write", (req, res) => {
-//   const title = req.query.title;
-//   const content = req.query.content;
-//   const username = req.query.username;
-//   const values = [title, content, username];
-
-//   //SQL 코드
-//   const sql =
-//     "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1)";
-
-//   db.query(sql, values, (err, result) => {
-//     if (err) console.log(err);
-//     else res.send(result);
-//   });
-// });
-
+// 글 작성
 app.post("/write", upload.single("file"), (req, res) => {
   const title = req.body.title;
   const content = req.body.content;
   const username = req.body.username;
-  const file = req.file.path;
+  const file = req.file.filename;
   const values = [title, content, username, file];
 
-  // SQL 코드
   const sql =
     "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1, ?)";
 

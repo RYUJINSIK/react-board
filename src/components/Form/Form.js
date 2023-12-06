@@ -90,6 +90,7 @@ const Form = () => {
             type="file"
             name="filename"
             onChange={handleInputChange}
+            accept="image/*"
             required
           ></input>
         </div>

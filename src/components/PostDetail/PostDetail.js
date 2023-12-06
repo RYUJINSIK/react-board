@@ -27,6 +27,7 @@ const PostDetail = () => {
       <div>
         <h1>{post[0].title}</h1>
         <h3>{post[0].content}</h3>
+        <img src={`/${post[0].file}`} alt="이미지"></img>
       </div>
     )
   );
