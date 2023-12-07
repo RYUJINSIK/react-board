@@ -19,6 +19,10 @@ const MainScreen = () => {
       });
   }, []);
 
+  const handleImgDefault = (e) => {
+    e.target.src = "/example.png";
+  };
+
   return (
     <div className="post-container">
       <div className="post-list">
@@ -26,6 +30,12 @@ const MainScreen = () => {
           ? null
           : list.map((list) => (
               <div key={list.id} className="post-item">
+                <img
+                  src={`/${list.file}`}
+                  alt={list.title}
+                  onError={handleImgDefault}
+                  className="thumbnail"
+                />
                 <h3>{list.title}</h3>
                 <p>{list.content}</p>
                 <Link to={`/post/${list.id}`}>더보기</Link>

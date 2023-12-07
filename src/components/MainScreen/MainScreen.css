@@ -18,3 +18,7 @@
   border: rgb(221, 221, 221) solid 1px;
   box-sizing: border-box; /* 패딩과 테두리를 포함하여 요소의 전체 크기 계산 */
 }
+
+.thumbnail {
+  width: 50px;
+}
