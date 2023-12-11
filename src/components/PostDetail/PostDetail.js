@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Comment from "../../components/Comment/Comment";
 
 const PostDetail = () => {
   const { postId } = useParams();
@@ -24,11 +25,14 @@ const PostDetail = () => {
 
   return (
     post.length !== 0 && (
-      <div>
-        <h1>{post[0].title}</h1>
-        <h3>{post[0].content}</h3>
-        <img src={`/${post[0].file}`} alt="이미지"></img>
-      </div>
+      <>
+        <div>
+          <h1>{post[0].title}</h1>
+          <h3>{post[0].content}</h3>
+          <img src={`/${post[0].file}`} alt="이미지"></img>
+        </div>
+        <Comment postId={postId} />
+      </>
     )
   );
 };
