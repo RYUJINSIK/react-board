@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Comment = (props) => {
-  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState([]);
   const [username, setUsername] = useState("");
   const [commentText, setCommentText] = useState("");
+  const [reload, setReload] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("/comment", {
+        params: {
+          postId: parseInt(props.postId),
+        },
+      })
+      .then((res) => {
+        setComment(res.data);
+      })
+      .catch((error) => {
+        console.log("!", error);
+      });
+  }, [reload]);
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -15,20 +32,28 @@ const Comment = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (!username || !commentText) {
-      // 유효성 검사: 빈 칸일 경우
       alert("닉네임과 댓글을 입력해주세요.");
       return;
     }
 
-    const newComment = {
+    const commentData = {
+      postId: props.postId,
       username: username,
-      text: commentText,
+      comment: commentText,
     };
 
-    setComments([...comments, newComment]);
-    setUsername("");
-    setCommentText("");
+    axios
+      .post("/commentWrite", commentData)
+      .then((res) => {
+        setReload(!reload);
+        setUsername("");
+        setCommentText("");
+      })
+      .catch((error) => {
+        console.error("댓글 작성 실패:", error);
+      });
   };
 
   return (
@@ -50,19 +75,16 @@ const Comment = (props) => {
       </form>
       <div>
         <h3>댓글 목록</h3>
-        {comments.length === 0 ? (
-          <p>댓글이 없습니다.</p>
-        ) : (
+        {comment.length === 0 ? null : (
           <ul>
-            {comments.map((comment, index) => (
+            {comment.map((comment, index) => (
               <li key={index}>
-                <strong>{comment.username}</strong>: {comment.text}
+                <strong>{comment.writer}</strong>: {comment.comment}
               </li>
             ))}
           </ul>
         )}
       </div>
-      {props.postId}
     </div>
   );
 };

@@ -5,6 +5,10 @@ const port = process.env.REACT_APP_PORT;
 const multer = require("multer");
 const path = require("path");
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
@@ -41,7 +45,7 @@ db.connect(function (err) {
 
 // 글 목록
 app.get("/select", (req, res) => {
-  const sql = "SELECT * FROM board;";
+  const sql = "SELECT * FROM board order by id limit 0, 5;";
   db.query(sql, (err, result) => {
     if (err) console.log(err);
     else res.send(result);
@@ -59,6 +63,17 @@ app.get("/read", (req, res) => {
   });
 });
 
+// 댓글 조회
+app.get("/comment", (req, res) => {
+  const postId = req.query.postId;
+
+  const sql = "SELECT * FROM comment WHERE postid = ? ;";
+  db.query(sql, postId, (err, result) => {
+    if (err) console.log(err);
+    else res.send(result);
+  });
+});
+
 // 글 작성
 app.post("/write", upload.single("file"), (req, res) => {
   const title = req.body.title;
@@ -69,6 +84,21 @@ app.post("/write", upload.single("file"), (req, res) => {
 
   const sql =
     "INSERT INTO board.board values ((SELECT IFNULL(MAX(b.id) + 1, 1) FROM board b), ?, ?, NOW(), ?, 1, ?)";
+
+  db.query(sql, values, (err, result) => {
+    if (err) console.log(err, sql);
+    else res.send(result);
+  });
+});
+
+// 댓글 작성
+app.post("/commentWrite", (req, res) => {
+  const postId = req.body.postId;
+  const username = req.body.username;
+  const comment = req.body.comment;
+  const values = [parseInt(postId), username, comment];
+
+  const sql = "INSERT INTO board.comment values (?, ?, ?, NOW())";
 
   db.query(sql, values, (err, result) => {
     if (err) console.log(err, sql);

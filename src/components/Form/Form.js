@@ -29,6 +29,7 @@ const Form = () => {
     postData.append("title", title);
     postData.append("content", content);
     postData.append("file", file); // 파일 추가
+    console.log("postData ? : ", postData);
 
     try {
       const response = await axios.post("/write", postData, {
@@ -53,54 +54,93 @@ const Form = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="form-container">
-        <div className="form-group">
-          <label>사용자:</label>
-          <input
-            type="text"
-            name="username"
-            value={username}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>제목:</label>
-          <input
-            type="text"
-            name="title"
-            value={title}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>내용:</label>
-          <textarea
-            name="content"
-            value={content}
-            onChange={handleInputChange}
-            required
-          ></textarea>
-        </div>
-        <div className="form-group">
-          <label>첨부파일:</label>
-          <input
-            type="file"
-            name="filename"
-            onChange={handleInputChange}
-            accept="image/*"
-            required
-          ></input>
-        </div>
-        <div className="button-container">
-          <button type="submit" className="submit-button">
-            등록
-          </button>
-        </div>
-      </form>
-    </div>
+    <body className="bg-gray-100">
+      <div className="container mx-auto p-8">
+        <form className="space-y-6">
+          <div>
+            <label
+              for="author"
+              className="block text-sm font-medium text-gray-700"
+            >
+              작성자
+            </label>
+            <input
+              type="text"
+              id="author"
+              name="username"
+              className="mt-1 form-input block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="입력칸"
+              value={username}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="title"
+              className="block text-sm font-medium text-gray-700"
+            >
+              제목
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              className="mt-1 form-input block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="입력칸"
+              value={title}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <label
+              for="content"
+              className="block text-sm font-medium text-gray-700"
+            >
+              내용
+            </label>
+            <textarea
+              id="content"
+              name="content"
+              rows="4"
+              className="mt-1 form-input block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="입력칸"
+              value={content}
+              onChange={handleInputChange}
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="thumbnail"
+              className="block text-sm font-medium text-gray-700"
+            >
+              썸네일
+            </label>
+            <input
+              type="file"
+              id="thumbnail"
+              name="filename"
+              className="mt-1 block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="파일첨부"
+              onChange={handleInputChange}
+              accept="image/*"
+              required
+            />
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-offset-1 focus:ring-blue-500"
+              onClick={handleSubmit}
+            >
+              제출
+            </button>
+          </div>
+        </form>
+      </div>
+    </body>
   );
 };
 
