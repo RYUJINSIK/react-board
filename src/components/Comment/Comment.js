@@ -57,35 +57,63 @@ const Comment = (props) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="닉네임"
-          value={username}
-          onChange={handleUsernameChange}
-        />
-        <input
-          type="text"
-          placeholder="댓글을 입력하세요"
-          value={commentText}
-          onChange={handleCommentTextChange}
-        />
-        <button type="submit">댓글 달기</button>
-      </form>
-      <div>
-        <h3>댓글 목록</h3>
-        {comment.length === 0 ? null : (
-          <ul>
-            {comment.map((comment, index) => (
-              <li key={index}>
-                <strong>{comment.writer}</strong>: {comment.comment}
-              </li>
-            ))}
-          </ul>
-        )}
+    <body className="bg-gray-50">
+      <div className="max-w-2xl mx-auto py-3">
+        <div className="bg-white shadow rounded-lg p-6">
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">댓글</h2>
+          </div>
+
+          {comment.length === 0 ? null : (
+            <ul>
+              {comment.map((comment, index) => (
+                <div className="space-y-4 mb-3" key={index}>
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex justify-between">
+                      <div className="text-sm text-gray-800">
+                        {comment.writer}
+                      </div>
+
+                      <div className="text-sm text-gray-500">
+                        {comment.created_date.slice(0, 10)}
+                      </div>
+                    </div>
+                    <p className="text-black">{comment.comment}</p>
+                  </div>
+                  <hr />
+                </div>
+              ))}
+            </ul>
+          )}
+          <div className="mt-6">
+            <div className="flex">
+              <input
+                type="text"
+                className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring focus:border-blue-300"
+                placeholder="닉네임"
+                aria-label="닉네임"
+                value={username}
+                onChange={handleUsernameChange}
+              />
+              <input
+                type="text"
+                className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring focus:border-blue-300 ml-4"
+                aria-label="댓글내용"
+                placeholder="댓글을 입력하세요"
+                value={commentText}
+                onChange={handleCommentTextChange}
+              />
+              <button
+                className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring"
+                onClick={handleSubmit}
+              >
+                댓글달기
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </body>
   );
 };
 

@@ -5,10 +5,16 @@ import axios from "axios";
 
 const MainScreen = () => {
   const [list, setList] = useState([]);
+  const [selectedItem, setSelectedItem] = useState("최신순");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     axios
-      .get("/select")
+      .get("/select", {
+        params: {
+          sort: selectedItem,
+        },
+      })
       .then((res) => {
         console.log(res);
         setList(res.data);
@@ -16,49 +22,67 @@ const MainScreen = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [selectedItem]);
 
   const handleImgDefault = (e) => {
     e.target.src = "/example.png";
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    setIsDropdownOpen(false);
   };
 
   return (
     <div className="bg-gray-100">
       <div className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-4">
-          <div className="relative">
-            <button
-              id="dropdownButton"
-              className="px-4 py-2 bg-white text-gray-700 rounded-md shadow"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              최신순 ▼
-            </button>
-            <div
-              id="dropdown"
-              className="hidden absolute z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700"
-            >
-              <ul
-                className="py-1 text-sm text-gray-700"
-                aria-labelledby="dropdownButton"
+          <div className="relative inline-block text-left">
+            <div>
+              <button
+                type="button"
+                className="inline-flex justify-center w-full px-4 py-2 bg-white text-sm font-medium text-gray-700 border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={toggleDropdown}
+                aria-expanded={isDropdownOpen}
               >
-                <li>
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                    최신순
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-100">
-                    오래된 순
-                  </a>
-                </li>
-              </ul>
+                {selectedItem} ▼
+              </button>
             </div>
+
+            {isDropdownOpen && (
+              <div
+                className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                role="menu"
+                aria-orientation="vertical"
+              >
+                <div className="py-1" role="none">
+                  <p
+                    className="text-gray-700 block px-4 py-2 text-sm cursor-pointer"
+                    onClick={() => handleItemClick("최신순")}
+                    role="menuitem"
+                  >
+                    최신순
+                  </p>
+                  <p
+                    className="text-gray-700 block px-4 py-2 text-sm cursor-pointer"
+                    onClick={() => handleItemClick("오래된순")}
+                    role="menuitem"
+                  >
+                    오래된순
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md shadow">
-            게시글 작성
-          </button>
+          <Link to={`/form`}>
+            <button className="px-4 py-2 bg-blue-500 text-white rounded-md shadow">
+              게시글 작성
+            </button>
+          </Link>
         </div>
 
         {/* <!-- Posts List --> */}

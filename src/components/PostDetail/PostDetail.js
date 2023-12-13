@@ -39,19 +39,34 @@ const PostDetail = () => {
     });
   };
 
+  const handleImgDefault = (e) => {
+    e.target.src = "/example.png";
+  };
+
   return (
     post.length !== 0 && (
       <>
-        <div>
-          <h1>{post[0].title}</h1>
-          <h3>{post[0].content}</h3>
-          <img
-            src={`/${post[0].file}`}
-            alt="이미지"
-            onClick={handleImageDownload}
-          ></img>
-        </div>
-        <Comment postId={postId} />
+        <body class="bg-gray-50 pt-5">
+          <div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg ">
+            <h1 class="text-2xl font-bold mb-2">{post[0].title}</h1>
+            <div class="text-gray-600 text-sm mb-4 ">
+              {post[0].writer} | {post[0].created_date.slice(0, 10)}
+            </div>
+            {post[0].file && ( // post[0].file 값이 존재할 때에만 img 태그 렌더링
+              <img
+                className="mb-4 rounded"
+                src={`/${post[0].file}`}
+                alt="이미지"
+                onClick={handleImageDownload}
+                onError={handleImgDefault}
+              />
+            )}
+            <div class="text-gray-800 ">
+              <p>{post[0].content}</p>
+            </div>
+          </div>
+          <Comment postId={postId} />
+        </body>
       </>
     )
   );

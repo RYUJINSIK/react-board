@@ -45,7 +45,13 @@ db.connect(function (err) {
 
 // 글 목록
 app.get("/select", (req, res) => {
-  const sql = "SELECT * FROM board order by id limit 0, 5;";
+  const sort = req.query.sort;
+  let sql = "";
+  if (sort === "최신순")
+    sql = "SELECT * FROM board order by id desc limit 0, 5;";
+  if (sort === "오래된순")
+    sql = "SELECT * FROM board order by id asc limit 0, 5;";
+
   db.query(sql, (err, result) => {
     if (err) console.log(err);
     else res.send(result);
