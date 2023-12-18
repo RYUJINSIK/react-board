@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./MainScreen.css";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setPage } from "../../actions/actions";
 
 const MainScreen = () => {
   const [list, setList] = useState([]);
@@ -35,6 +37,13 @@ const MainScreen = () => {
   const handleItemClick = (item) => {
     setSelectedItem(item);
     setIsDropdownOpen(false);
+  };
+
+  const dispatch = useDispatch();
+
+  const handlePageChange = (pageNumber) => {
+    dispatch(setPage(pageNumber));
+    // 페이지 변경 후 추가 작업 수행
   };
 
   return (
@@ -113,13 +122,22 @@ const MainScreen = () => {
         <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
           ◀
         </button>
-        <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
+        <button
+          className="px-3 py-1 bg-white rounded-md shadow text-gray-700"
+          onClick={() => handlePageChange(1)}
+        >
           1
         </button>
-        <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
+        <button
+          className="px-3 py-1 bg-white rounded-md shadow text-gray-700"
+          onClick={() => handlePageChange(2)}
+        >
           2
         </button>
-        <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
+        <button
+          className="px-3 py-1 bg-white rounded-md shadow text-gray-700"
+          onClick={() => handlePageChange(3)}
+        >
           3
         </button>
         <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
