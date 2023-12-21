@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./MainScreen.css";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPage } from "../../actions/actions";
+import PageButton from "../../components/PageButton/PageButton";
 
 const MainScreen = () => {
   const [list, setList] = useState([]);
   const [selectedItem, setSelectedItem] = useState("최신순");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const pageNumber = useSelector((state) => state.pageNumber);
 
   useEffect(() => {
     axios
@@ -26,6 +28,10 @@ const MainScreen = () => {
       });
   }, [selectedItem]);
 
+  useEffect(() => {
+    // 페이징 했을 때 게시글 목록 research
+  }, [pageNumber]);
+
   const handleImgDefault = (e) => {
     e.target.src = "/example.png";
   };
@@ -37,13 +43,6 @@ const MainScreen = () => {
   const handleItemClick = (item) => {
     setSelectedItem(item);
     setIsDropdownOpen(false);
-  };
-
-  const dispatch = useDispatch();
-
-  const handlePageChange = (pageNumber) => {
-    dispatch(setPage(pageNumber));
-    // 페이지 변경 후 추가 작업 수행
   };
 
   return (
@@ -97,7 +96,7 @@ const MainScreen = () => {
         {/* <!-- Posts List --> */}
         {list.length === 0
           ? null
-          : list.map((list) => (
+          : list.slice(0, 5).map((list) => (
               <div className="space-y-4 pb-3">
                 <Link to={`/post/${list.id}`}>
                   <div className="flex items-center space-x-4 bg-white p-4 rounded-lg shadow">
@@ -117,40 +116,7 @@ const MainScreen = () => {
               </div>
             ))}
       </div>
-      {/* <!-- Pagination --> */}
-      <div className="flex justify-center items-center space-x-2 pb-5">
-        <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
-          ◀
-        </button>
-        <button
-          className="px-3 py-1 bg-white rounded-md shadow text-gray-700"
-          onClick={() => handlePageChange(1)}
-        >
-          1
-        </button>
-        <button
-          className="px-3 py-1 bg-white rounded-md shadow text-gray-700"
-          onClick={() => handlePageChange(2)}
-        >
-          2
-        </button>
-        <button
-          className="px-3 py-1 bg-white rounded-md shadow text-gray-700"
-          onClick={() => handlePageChange(3)}
-        >
-          3
-        </button>
-        <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
-          4
-        </button>
-        <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
-          5
-        </button>
-        {/* <!-- End of page number block --> */}
-        <button className="px-3 py-1 bg-white rounded-md shadow text-gray-700">
-          ▶
-        </button>
-      </div>
+      <PageButton totalPages={list.length / 5 + 1} currentPage={pageNumber} />
     </div>
   );
 };

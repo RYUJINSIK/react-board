@@ -1,6 +1,6 @@
 // reducers.js
 const initialState = {
-  currentPage: 1, // 기본 페이지 설정
+  pageNumber: 1, // 기본 페이지 설정
 };
 
 export const pageReducer = (state = initialState, action) => {
@@ -8,7 +8,7 @@ export const pageReducer = (state = initialState, action) => {
     case "SET_PAGE":
       return {
         ...state,
-        currentPage: action.pageNumber,
+        pageNumber: action.pageNumber,
       };
     default:
       return state;

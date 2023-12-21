@@ -2,22 +2,17 @@ import { createStore } from "redux";
 
 export const setPage = (pageNumber) => {
   return {
-    type: "SET_PAGE",
     pageNumber: pageNumber,
   };
 };
 
 const initialState = {
-  currentPage: 1, // 기본 페이지 설정
+  pageNumber: 1, // 기본 페이지 설정
 };
 
-export const pageReducer = (state = initialState, action) => {
+const pageReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_PAGE":
-      return {
-        ...state,
-        currentPage: action.pageNumber,
-      };
+    // 다른 액션 처리...
     default:
       return state;
   }

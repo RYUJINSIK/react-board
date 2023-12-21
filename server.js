@@ -47,10 +47,8 @@ db.connect(function (err) {
 app.get("/select", (req, res) => {
   const sort = req.query.sort;
   let sql = "";
-  if (sort === "최신순")
-    sql = "SELECT * FROM board order by id desc limit 0, 5;";
-  if (sort === "오래된순")
-    sql = "SELECT * FROM board order by id asc limit 0, 5;";
+  if (sort === "최신순") sql = "SELECT * FROM board order by id desc ";
+  if (sort === "오래된순") sql = "SELECT * FROM board order by id asc ";
 
   db.query(sql, (err, result) => {
     if (err) console.log(err);
