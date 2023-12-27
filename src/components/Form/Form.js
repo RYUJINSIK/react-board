@@ -132,7 +132,7 @@ const Form = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-offset-1 focus:ring-blue-500"
+              className="px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-600 focus:outline-none focus:border-blue-700 focus:ring-1 focus:ring-offset-1 focus:ring-blue-500"
               onClick={handleSubmit}
             >
               제출

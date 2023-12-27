@@ -8,14 +8,33 @@ import PageButton from "../../components/PageButton/PageButton";
 
 const MainScreen = () => {
   const [list, setList] = useState([]);
+  const [postLength, setPostLength] = useState(0);
   const [selectedItem, setSelectedItem] = useState("최신순");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pageNumber = useSelector((state) => state.pageNumber);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(setPage(1));
+    axios
+      .get("/selectAll")
+      .then((res) => {
+        console.log(res);
+        setPostLength(res.data.length);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [selectedItem]);
+
+  useEffect(() => {
+    // 페이징 했을 때 게시글 목록 research
+    console.log("😜");
     axios
       .get("/select", {
         params: {
+          page: pageNumber,
           sort: selectedItem,
         },
       })
@@ -26,10 +45,6 @@ const MainScreen = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [selectedItem]);
-
-  useEffect(() => {
-    // 페이징 했을 때 게시글 목록 research
   }, [pageNumber]);
 
   const handleImgDefault = (e) => {
@@ -63,7 +78,7 @@ const MainScreen = () => {
 
             {isDropdownOpen && (
               <div
-                className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                className="origin-top-right absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 role="menu"
                 aria-orientation="vertical"
               >
@@ -87,13 +102,12 @@ const MainScreen = () => {
             )}
           </div>
           <Link to={`/form`}>
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md shadow">
+            <button className="px-4 py-2 bg-black hover:bg-gray-600 text-white rounded-md shadow">
               게시글 작성
             </button>
           </Link>
         </div>
 
-        {/* <!-- Posts List --> */}
         {list.length === 0
           ? null
           : list.slice(0, 5).map((list) => (
@@ -116,7 +130,7 @@ const MainScreen = () => {
               </div>
             ))}
       </div>
-      <PageButton totalPages={list.length / 5 + 1} currentPage={pageNumber} />
+      <PageButton totalPages={postLength / 5 + 1} currentPage={pageNumber} />
     </div>
   );
 };

@@ -43,13 +43,29 @@ db.connect(function (err) {
   console.log("DB is Connected!");
 });
 
-// 글 목록
-app.get("/select", (req, res) => {
-  const sort = req.query.sort;
-  let sql = "";
-  if (sort === "최신순") sql = "SELECT * FROM board order by id desc ";
-  if (sort === "오래된순") sql = "SELECT * FROM board order by id asc ";
+// 글 목록(전체)
+app.get("/selectAll", (req, res) => {
+  let sql = "SELECT * FROM board";
 
+  db.query(sql, (err, result) => {
+    if (err) console.log(err);
+    else res.send(result);
+  });
+});
+
+// 글 목록(페이징)
+app.get("/select", (req, res) => {
+  const page = req.query.page;
+  const sort = req.query.sort;
+
+  let offset = (page - 1) * 5; // 오프셋 계산
+
+  let sql = "";
+
+  if (sort === "최신순")
+    sql = `SELECT * FROM board ORDER BY id DESC LIMIT ${offset}, 5`;
+  if (sort === "오래된순")
+    sql = `SELECT * FROM board ORDER BY id ASC LIMIT ${offset}, 5`;
   db.query(sql, (err, result) => {
     if (err) console.log(err);
     else res.send(result);

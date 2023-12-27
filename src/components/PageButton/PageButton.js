@@ -36,8 +36,10 @@ const PageButtons = ({ totalPages, currentPage }) => {
       {pageGroup.map((page) => (
         <button
           key={page}
-          className={`px-3 py-1 bg-white rounded-md shadow text-gray-700 ${
-            page === currentPage ? "bg-gray-300" : ""
+          className={`px-3 py-1 rounded-md shadow ${
+            page === currentPage
+              ? "bg-black text-white"
+              : "bg-white text-gray-700"
           }`}
           onClick={() => handlePageChange(page)}
         >
