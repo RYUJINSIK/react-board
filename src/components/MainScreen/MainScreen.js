@@ -29,8 +29,6 @@ const MainScreen = () => {
   }, [selectedItem]);
 
   useEffect(() => {
-    // 페이징 했을 때 게시글 목록 research
-    console.log("😜");
     axios
       .get("/select", {
         params: {

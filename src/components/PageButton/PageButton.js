@@ -7,16 +7,13 @@ const PageButtons = ({ totalPages, currentPage }) => {
 
   console.log("total ? , current ? : ", totalPages, currentPage);
 
-  // 현재 페이지 그룹의 첫 번째 페이지 계산
   let startPage = Math.floor((currentPage - 1) / 5) * 5 + 1;
   let endPage = startPage + 4;
 
-  // 총 페이지가 5개 미만인 경우
   if (endPage > totalPages) {
     endPage = totalPages;
   }
 
-  // 현재 페이지 그룹에 따른 페이지 번호를 배열에 추가
   for (let i = startPage; i <= endPage; i++) {
     pageGroup.push(i);
   }
@@ -25,7 +22,6 @@ const PageButtons = ({ totalPages, currentPage }) => {
 
   const handlePageChange = (pageNumber) => {
     dispatch(setPage(pageNumber));
-    // 페이지 변경 후 추가 작업 수행
   };
 
   return (
